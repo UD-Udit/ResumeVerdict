@@ -1,1 +1,1 @@
-export const baseUrl = `http://localhost:8000/resume`;
+export const baseUrl = `https://resume-verdict-server.vercel.app/resume`;
