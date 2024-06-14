@@ -27,7 +27,7 @@ export const Results = ({ results }) => {
                     <tr key={id} className="even:bg-gray-100 odd:bg-white">
                         <td className="py-4 px-2 border-b border-r w-[4%]">{id+1}</td>
                         <td className="py-4 px-2 border-b border-r w-[10%]">{result.Name}</td>
-                        <td className="py-4 px-2 border-b border-r w-[10%]">{result.PhoneNo}</td>
+                        <td className="py-4 px-2 border-b border-r w-[6%]">{result.PhoneNo}</td>
                         <td className="py-4 px-2 border-b border-r">{result.Email}</td>
                         <td className="py-4 px-2 border-b border-r">{result.Location}</td>
                         <td className="py-4 px-2 border-b border-r">{result.SoftSkills}</td>
