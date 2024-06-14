@@ -122,7 +122,7 @@ export const Input = ({setResults}) => {
         We will extract important information from the resumes for you!
       </h3>
 
-      <button className='w-4/5 p-4  flex justify-center items-center rounded-md outline-none shadow-md bg-red-600 font-bold text-white' onClick={handleSubmit}>
+      <button className='w-4/5 p-4  flex justify-center items-center rounded-md outline-none shadow-md bg-red-600 font-bold text-white disabled:cursor-not-allowed' disabled={loading || selectedFiles.length===0} onClick={handleSubmit}>
         {
           loading ? 
             <div className='flex justify-center items-center gap-2'>
