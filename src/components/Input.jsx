@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { FaRegFilePdf, FaAngleRight } from "react-icons/fa";
 import { baseUrl } from '../baseUrl';
 import axios from "axios";
@@ -8,8 +8,10 @@ export const Input = ({setResults}) => {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [loading, setLoading] = useState(false);
   const [dragActive, setDragActive] = useState(false);
+  const [progress, setProgress] = useState(0);
   const inputRef = useRef(null);
   const navigate = useNavigate();
+  const intervalRef = useRef(null);
 
   const handleFileChange = (event) => {
     const files = Array.from(event.target.files);
@@ -42,16 +44,32 @@ export const Input = ({setResults}) => {
 
   const handleSubmit = async () => {
     setLoading(true);
+    setProgress(0);
     const formData = new FormData();  
     selectedFiles.forEach((file, index) => {
       formData.append(`resumes`, file);
     });
+    const totalFiles = selectedFiles.length;
+    const totalTime = totalFiles * 7;
+    let progressValue = 0;
+    intervalRef.current = setInterval(() => {
+      progressValue += (100 / totalTime);
+      if (progressValue >= 100) {
+        progressValue = 100;
+        setProgress(progressValue);
+        clearInterval(intervalRef.current);
+      } else {
+        setProgress(progressValue);
+      }
+    }, 1000);
+    
     try {
       const response = await axios.post(`${baseUrl}/resumes`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data', 
         },
       });
+      clearInterval(intervalRef.current);
       if(response.status === 200 && response.data){
         console.log('Response:', response.data);
         setResults(response.data.result)
@@ -60,11 +78,17 @@ export const Input = ({setResults}) => {
         console.log(response.data);
       }
     } catch (error) {
+      clearInterval(intervalRef.current);
       console.error('Error uploading files:', error);
     }finally{
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    // Cleanup interval on component unmount
+    return () => clearInterval(intervalRef.current);
+  }, []);
   
   return (
     <div className="border-1 text-white border-white rounded-2xl p-2 w-[70%] gap-8 h-4/5 flex flex-col items-center bg-[#ebebeb30]">
@@ -103,7 +127,9 @@ export const Input = ({setResults}) => {
           loading ? 
             <div className='flex justify-center items-center gap-2'>
               <div className="loader"></div>
-              <p className='text-white'>Processing...</p>
+              <p className='text-white'>
+              {Math.min(progress, 100).toFixed(2)}% Processed...
+              </p>
             </div>
             :
             <div className='flex justify-center items-center gap-2'>
