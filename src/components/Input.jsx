@@ -4,7 +4,7 @@ import { baseUrl } from '../baseUrl';
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
 
-export const Input = ({setResults}) => {
+export const Input = ({setResults, role, setRole}) => {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [loading, setLoading] = useState(false);
   const [dragActive, setDragActive] = useState(false);
@@ -49,6 +49,7 @@ export const Input = ({setResults}) => {
     selectedFiles.forEach((file, index) => {
       formData.append(`resumes`, file);
     });
+    formData.append('role', role);
     const totalFiles = selectedFiles.length;
     const totalTime = totalFiles * 7;
     let progressValue = 0;
@@ -90,6 +91,12 @@ export const Input = ({setResults}) => {
     return () => clearInterval(intervalRef.current);
   }, []);
   
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter' && selectedFiles.length !== 0) {
+      handleSubmit();
+    }
+  };
+
   return (
     <div className="border-1 text-white border-white rounded-2xl p-2 w-[70%] gap-8 h-4/5 flex flex-col items-center bg-[#ebebeb30]">
       <div
@@ -118,9 +125,8 @@ export const Input = ({setResults}) => {
         
       </div>
 
-      <h3 className='text-2xl p-2 font-semibold'>
-        We will extract important information from the resumes for you!
-      </h3>
+      <input type="text" value={role} onChange={(e)=>setRole(e.target.value)} required onKeyDown={handleKeyDown}
+      className='w-4/5 outline-none p-4 bg-[#0f5e60] text-xl font-semibold rounded-md px-6 shadow-lg text-whites' placeholder='Ex. Software Developer'/>
 
       <button className='w-4/5 p-4  flex justify-center items-center rounded-md outline-none shadow-md bg-red-600 font-bold text-white disabled:cursor-not-allowed' disabled={loading || selectedFiles.length===0} onClick={handleSubmit}>
         {

@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { baseUrl } from '../baseUrl';
 import { IoMdSend } from "react-icons/io";
 
-export const Chat = ({ data , onClose}) => {
+export const Chat = ({ data, role , onClose}) => {
     const [ threadId, setThreadId] = useState(null);
     const [ assistantId, setAssistantId] = useState(null);
     const [ message, setMessage] = useState('');
@@ -16,7 +16,8 @@ export const Chat = ({ data , onClose}) => {
         try {
             setLoading(true);
             const response = await axios.post(`${baseUrl}/assistant`, {
-                data
+                data, 
+                role
             });
 
             if (response.status === 200 && response.data) {
