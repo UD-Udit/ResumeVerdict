@@ -22,6 +22,7 @@ export const Results = ({ results }) => {
                   <th className="py-4 px-2 border-b border-r">Experience</th>
                   <th className="py-4 px-2 border-b border-r">Skills</th>
                   <th className="py-4 px-2 border-b border-r">Achievements</th>
+                  <th className="py-4 px-2 border-b border-r">Relevance(Scale of 10)</th>
                 </tr>
               </thead>
               <tbody>
@@ -37,6 +38,7 @@ export const Results = ({ results }) => {
                         <td className="py-4 px-2 border-b border-r">{result.Experience}</td>
                         <td className="py-4 px-2 border-b border-r">{result.Skills}</td>
                         <td className="py-4 px-2 border-b border-r">{result.Achievements}</td>
+                        <td className="py-4 px-2 border-b border-r">{result.score}</td>
                     </tr>
                   ))
                 }
